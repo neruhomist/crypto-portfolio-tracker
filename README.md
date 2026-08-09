@@ -1,33 +1,28 @@
 # Alpha — Crypto Portfolio Tracker
 
-Автоматизований трекер криптопортфеля на базі Google Sheets + Google Apps Script.
+Automated crypto portfolio tracker built with Google Sheets + Google Apps Script.
 
-## Що робить
+## Features
 
-- Щодня о 9:00 автоматично оновлює ціни монет (OKX → BingX → Bybit, публічні API)
-- Підтягує історію угод з OKX і BingX, рахує суми покупок по місяцях
-- Автоматично додає нову колонку при настанні нового місяця
-- Автоматично додає новий рядок, якщо з'являється новий токен в угодах
-- Рахує Qty (кількість монет) напряму з балансів бірж (OKX + BingX)
-- Підтягує баланс USDT окремо по кожній біржі
-- P/L (дохід/збиток) рахується формулами в самій таблиці
+- Daily automatic price updates at 9:00 AM (OKX → BingX → Bybit, public APIs)
+- Pulls trade history from OKX and BingX, calculates monthly purchase totals
+- Automatically creates a new column when a new month starts
+- Automatically adds a new row when a new token appears in trade history
+- Calculates Qty (holdings) directly from exchange balances (OKX + BingX)
+- Pulls USDT balance separately per exchange
+- P/L (profit/loss) calculated via spreadsheet formulas
 
-## Біржі
+## Exchanges
 
-| Біржа | Ціни | Угоди/баланси |
+| Exchange | Prices | Trades/Balances |
 |---|---|---|
-| OKX | ✅ | ✅ повна автоматизація |
-| BingX | ✅ | ✅ повна автоматизація |
-| Bybit | ✅ (публічні) | ❌ заблоковано гео (Google Cloud IP) |
-| Binance | ❌ заблоковано гео | ❌ заблоковано гео |
+| OKX | ✅ | ✅ fully automated |
+| BingX | ✅ | ✅ fully automated |
+| Bybit | ✅ (public) | ❌ blocked by geo-restriction (Google Cloud IP) |
+| Binance | ❌ blocked by geo-restriction | ❌ blocked by geo-restriction |
 
-## Налаштування
+## Setup
 
-1. Створити API-ключі (read-only!) на OKX і BingX
-2. Зберегти в Script Properties: `OKX_API_KEY`, `OKX_SECRET_KEY`, `OKX_PASSPHRASE`, `BINGX_API_KEY`, `BINGX_SECRET_KEY`
-3. Структура аркуша "інвестиції": колонка A — тікери монет, далі місяці, `Поточна ціна`, `Qty`, `Поточна вартість`, `P/L $`, `P/L %`
-4. Запустити `createDailyTrigger()` один раз для автозапуску
-
-## Обмеження
-
-Bybit і Binance блокують запити з серверів Google Cloud (гео-обмеження), тому дані з цих бірж (крім публічних цін) вносяться вручну.
+1. Create read-only API keys on OKX and BingX
+2. Save them in Script Properties: `OKX_API_KEY`, `OKX_SECRET_KEY`, `OKX_PASSPHRASE`, `BINGX_API_KEY`, `BINGX_SECRET_KEY`
+3. Sheet structure ("investments" tab): column A — coin tickers, followed by monthly columns, `Current Price`, `Qty`,
