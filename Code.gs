@@ -12,6 +12,7 @@ function updatePrices() {
     var price = getOkxPrice(coin + '-USDT');
     if (price === 'н/д') price = getBingxPrice(coin + '-USDT');
     if (price === 'н/д') price = getBybitPrice(coin + 'USDT');
+    if (price === 'н/д') price = getCmcPrice(coin);
 
     sheet.getRange(row, priceCol).setValue(price);
     Utilities.sleep(200);
@@ -81,8 +82,7 @@ function updateFromExchanges() {
     var coin = sheet.getRange(row, 1).getValue().toString().trim().toUpperCase();
     if (!coin) continue;
     if (monthlyTotals[coin]) {
-      var existing = sheet.getRange(row, monthCol).getValue() || 0;
-      sheet.getRange(row, monthCol).setValue(Math.round((existing + monthlyTotals[coin]) * 100) / 100);
+      sheet.getRange(row, monthCol).setValue(Math.round(monthlyTotals[coin] * 100) / 100);
     }
     if (qtyTotals[coin] !== undefined) {
       sheet.getRange(row, qtyCol).setValue(qtyTotals[coin]);
@@ -425,4 +425,24 @@ function updateQtyFromBalances() {
 
   updateUsdtBalances(sheet);
   Logger.log('Qty оновлено з реальних балансів бірж');
+}
+
+function getCmcPrice(symbol) {
+  var apiKey = PropertiesService.getScriptProperties().getProperty('CMC_API_KEY');
+  var url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?symbol=' + symbol;
+  var options = {
+    method: 'get',
+    headers: { 'X-CMC_PRO_API_KEY': apiKey },
+    muteHttpExceptions: true
+  };
+  try {
+    var res = JSON.parse(UrlFetchApp.fetch(url, options).getContentText());
+    var data = res.data[symbol];
+    if (data && data[0] && data[0].quote && data[0].quote.USD) {
+      return data[0].quote.USD.price;
+    }
+    return 'н/д';
+  } catch(e) {
+    return 'н/д';
+  }
 }
