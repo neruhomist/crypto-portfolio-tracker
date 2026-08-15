@@ -4,13 +4,17 @@ Automated crypto portfolio tracker built with Google Sheets + Google Apps Script
 
 ## Features
 
-- Daily automatic price updates at 9:00 AM (OKX → BingX → Bybit, public APIs)
+- Daily automatic price updates at 9:00 AM (OKX → BingX → Bybit → CoinMarketCap fallback for delisted/unlisted tokens)
 - Pulls trade history from OKX and BingX, calculates monthly purchase totals
 - Automatically creates a new column when a new month starts
 - Automatically adds a new row when a new token appears in trade history
 - Calculates Qty (holdings) directly from exchange balances (OKX + BingX)
-- Pulls USDT balance separately per exchange
+- Pulls USDT balance separately per exchange (OKX, Bybit, BingX, Binance)
 - P/L (profit/loss) calculated via spreadsheet formulas
+
+## Limitations
+
+Bybit and Binance block requests from Google Cloud servers (geo-restriction), so trade history and balances from these exchanges are entered manually. Price data for delisted or unlisted tokens falls back to CoinMarketCap.
 
 ## Exchanges
 
